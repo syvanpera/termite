@@ -1034,6 +1034,18 @@ gboolean key_press_cb(VteTerminal *vte, GdkEventKey *event, keybind_info *info) 
                 if (modify_key_feed(event, info, modify_table))
                     return TRUE;
         }
+    } else if (modifiers == GDK_MOD1_MASK) {
+        switch (gdk_keyval_to_lower(event->keyval)) {
+            case GDK_KEY_c:
+                vte_terminal_copy_clipboard(vte);
+                return TRUE;
+            case GDK_KEY_v:
+                vte_terminal_paste_clipboard(vte);
+                return TRUE;
+            default:
+                if (modify_key_feed(event, info, modify_meta_table))
+                    return TRUE;
+        }
     } else if ((modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) ||
                (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK|GDK_SHIFT_MASK))) {
         if (modify_key_feed(event, info, modify_meta_table))
