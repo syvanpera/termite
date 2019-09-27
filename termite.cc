@@ -50,11 +50,11 @@ using namespace std::placeholders;
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)
 #define TERMINAL_SCALE_XXXX_SMALL  (TERMINAL_SCALE_XXX_SMALL/1.2)
 #define TERMINAL_SCALE_XXXXX_SMALL (TERMINAL_SCALE_XXXX_SMALL/1.2)
-#define TERMINAL_SCALE_XXX_LARGE   (PANGO_SCALE_XX_LARGE*1.2)
-#define TERMINAL_SCALE_XXXX_LARGE  (TERMINAL_SCALE_XXX_LARGE*1.2)
-#define TERMINAL_SCALE_XXXXX_LARGE (TERMINAL_SCALE_XXXX_LARGE*1.2)
+#define TERMINAL_SCALE_XXX_LARGE   (PANGO_SCALE_XX_LARGE*1.1)
+#define TERMINAL_SCALE_XXXX_LARGE  (TERMINAL_SCALE_XXX_LARGE*1.1)
+#define TERMINAL_SCALE_XXXXX_LARGE (TERMINAL_SCALE_XXXX_LARGE*1.1)
 #define TERMINAL_SCALE_MINIMUM     (TERMINAL_SCALE_XXXXX_SMALL/1.2)
-#define TERMINAL_SCALE_MAXIMUM     (TERMINAL_SCALE_XXXXX_LARGE*1.2)
+#define TERMINAL_SCALE_MAXIMUM     (TERMINAL_SCALE_XXXXX_LARGE*1.1)
 
 static const std::vector<double> zoom_factors = {
     TERMINAL_SCALE_MINIMUM,
@@ -1042,6 +1042,13 @@ gboolean key_press_cb(VteTerminal *vte, GdkEventKey *event, keybind_info *info) 
             case GDK_KEY_v:
                 vte_terminal_paste_clipboard(vte);
                 return TRUE;
+            case GDK_KEY_u:
+                if (!info->config.browser)
+                    break;
+                find_urls(vte, &info->panel);
+                gtk_widget_show(info->panel.da);
+                overlay_show(&info->panel, overlay_mode::urlselect, nullptr);
+                break;
             default:
                 if (modify_key_feed(event, info, modify_meta_table))
                     return TRUE;
